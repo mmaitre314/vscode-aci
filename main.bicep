@@ -11,7 +11,7 @@ param image string = 'mcr.microsoft.com/devcontainers/python:dev-3'
 param gitRepoUrl string = ''
 
 @description('VSCode extensions to install (e.g. ms-python.python, leave empty to skip)')
-param vsCodeExtensions array = []
+param vscodeExtensions array = []
 
 @description('Number of CPU cores')
 param cpuCores int = 1
@@ -34,7 +34,7 @@ var gcmVersion = '2.6.1'
 // Input validation (ugly hack to avoid using the experimental 'assert' or setting @minLength() which breaks bicepparam)
 var assertNameIsNotEmpty = 1 / (length(name) < 3 ? 0 : 1)
 
-var vsCodeExtensionArgs = [ for ext in vsCodeExtensions: '--install-extension ${ext}' ]
+var vscodeExtensionArgs = [ for ext in vscodeExtensions: '--install-extension ${ext}' ]
 
 var commandTemplate = '''
   set -euxo pipefail
@@ -61,10 +61,10 @@ var vsCodeCommandTemplate = replace(replace('''
     curl -sSL "https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64" --output /tmp/vscode-cli.tar.gz
     tar -xzf /tmp/vscode-cli.tar.gz -C /usr/local/bin
     code tunnel user login --provider microsoft
-    code tunnel --accept-server-license-terms --name {{name}} {{vsCodeExtensionArgs}}
+    code tunnel --accept-server-license-terms --name {{name}} {{vscodeExtensionArgs}}
   )&
   ''',
-  '{{vsCodeExtensionArgs}}', join(vsCodeExtensionArgs, ' ')),
+  '{{vscodeExtensionArgs}}', join(vscodeExtensionArgs, ' ')),
   '{{name}}', name)
 
 var command = replace(replace(replace(replace(

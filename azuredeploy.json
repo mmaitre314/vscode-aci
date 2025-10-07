@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.38.5.1644",
-      "templateHash": "178585519282034017"
+      "version": "0.38.33.27573",
+      "templateHash": "17168930235793959776"
     }
   },
   "parameters": {
@@ -36,7 +36,7 @@
         "description": "URL of Git repository to clone"
       }
     },
-    "vsCodeExtensions": {
+    "vscodeExtensions": {
       "type": "array",
       "defaultValue": [],
       "metadata": {
@@ -82,16 +82,16 @@
   "variables": {
     "copy": [
       {
-        "name": "vsCodeExtensionArgs",
-        "count": "[length(parameters('vsCodeExtensions'))]",
-        "input": "[format('--install-extension {0}', parameters('vsCodeExtensions')[copyIndex('vsCodeExtensionArgs')])]"
+        "name": "vscodeExtensionArgs",
+        "count": "[length(parameters('vscodeExtensions'))]",
+        "input": "[format('--install-extension {0}', parameters('vscodeExtensions')[copyIndex('vscodeExtensionArgs')])]"
       }
     ],
     "gcmVersion": "2.6.1",
     "assertNameIsNotEmpty": "[div(1, if(less(length(parameters('name')), 3), 0, 1))]",
     "commandTemplate": "  set -euxo pipefail\r\n  exec &> >(tee /root/vscode-aci.log)\r\n  {{gitCommandTemplate}}\r\n  {{vsCodeCommandTemplate}}\r\n  cd /root\r\n  sleep {{autoShutdown}}\r\n  ",
     "gitCommandTemplate": "[replace(replace('  (\r\n    curl -sSL https://github.com/git-ecosystem/git-credential-manager/releases/download/v{{gcmVersion}}/gcm-linux_amd64.{{gcmVersion}}.tar.gz --output /tmp/gcm-linux_amd64.tar.gz\r\n    tar -xzf /tmp/gcm-linux_amd64.tar.gz -C /usr/local/bin\r\n    git-credential-manager configure\r\n    git clone --filter=tree:0 --single-branch {{gitRepoUrl}}\r\n  )&\r\n  ', '{{gcmVersion}}', variables('gcmVersion')), '{{gitRepoUrl}}', parameters('gitRepoUrl'))]",
-    "vsCodeCommandTemplate": "[replace(replace('  (\r\n    curl -sSL \"https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64\" --output /tmp/vscode-cli.tar.gz\r\n    tar -xzf /tmp/vscode-cli.tar.gz -C /usr/local/bin\r\n    code tunnel user login --provider microsoft\r\n    code tunnel --accept-server-license-terms --name {{name}} {{vsCodeExtensionArgs}}\r\n  )&\r\n  ', '{{vsCodeExtensionArgs}}', join(variables('vsCodeExtensionArgs'), ' ')), '{{name}}', parameters('name'))]",
+    "vsCodeCommandTemplate": "[replace(replace('  (\r\n    curl -sSL \"https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64\" --output /tmp/vscode-cli.tar.gz\r\n    tar -xzf /tmp/vscode-cli.tar.gz -C /usr/local/bin\r\n    code tunnel user login --provider microsoft\r\n    code tunnel --accept-server-license-terms --name {{name}} {{vscodeExtensionArgs}}\r\n  )&\r\n  ', '{{vscodeExtensionArgs}}', join(variables('vscodeExtensionArgs'), ' ')), '{{name}}', parameters('name'))]",
     "command": "[replace(replace(replace(replace(variables('commandTemplate'), '{{gitCommandTemplate}}', if(equals(parameters('gitRepoUrl'), ''), '', variables('gitCommandTemplate'))), '{{vsCodeCommandTemplate}}', variables('vsCodeCommandTemplate')), '{{autoShutdown}}', parameters('autoShutdown')), '\r', '')]"
   },
   "resources": [
@@ -205,8 +205,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.38.5.1644",
-              "templateHash": "99810376176096107"
+              "version": "0.38.33.27573",
+              "templateHash": "2615872367714658733"
             }
           },
           "parameters": {

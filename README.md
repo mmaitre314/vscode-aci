@@ -89,3 +89,4 @@ Git Credential Manager:
     - VSCode online: https://vscode.dev/
 - Add User settings to container
     "chat.tools.terminal.autoApprove": { updates? }, "chat.agent.maxRequests": 100,
+- Add README logo
