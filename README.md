@@ -4,7 +4,7 @@ Code with multiple GitHub Copilot agents in parallel using VSCode and Dev Contai
 
 ## Quickstart
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgithub.com%2Fmmaitre314%2Fvscode-aci%2Fraw%2Frefs%2Fheads%2Fmain%2Fazuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmmaitre314%2Fvscode-aci%2Frefs%2Fheads%2Fmain%2Fazuredeploy.json)
 
 Sign in at https://microsoft.com/devicelogin with the device code provided.
 
