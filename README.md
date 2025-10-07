@@ -1,6 +1,10 @@
 # VSCode Dev Containers on Azure Container Instances
 
+Code with multiple GitHub Copilot agents in parallel using VSCode and Dev Containers on Azure Container Instances.
+
 ## Quickstart
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgithub.com%2Fmmaitre314%2Fvscode-aci%2Fraw%2Frefs%2Fheads%2Fmain%2Fazuredeploy.json)
 
 Sign in at https://microsoft.com/devicelogin with the device code provided.
 
@@ -66,8 +70,9 @@ VSCode:
 - [Dev Container Images](https://github.com/devcontainers/images/)
 - [ilteoood/vscode-remote-tunnels](https://github.com/ilteoood/vscode-remote-tunnels)
 
-Azure Container Instance:
-- [Quickstart Bicep](https://learn.microsoft.com/en-us/azure/container-instances/container-instances-quickstart-bicep?tabs=CLI)
+Azure:
+- [Azure Container Instance - Quickstart Bicep](https://learn.microsoft.com/en-us/azure/container-instances/container-instances-quickstart-bicep?tabs=CLI)
+- [Deploy-to-Azure button](https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-to-azure-button)
 
 Git Credential Manager:
 - [Install](https://github.com/git-ecosystem/git-credential-manager/blob/release/docs/install.md)
@@ -75,9 +80,7 @@ Git Credential Manager:
 
 ## Backlog
 
-- Add deploy button: https://github.com/azure/azure-quickstart-templates/tree/master/quickstarts/microsoft.containerinstance/aci-linuxcontainer-public-ip
-    https://share.google/bhqNASGpPufi2mgJx 
-    az bicep build -> to deploy folder [mention in README - Develop section]
+- Fix Deploy to Azure button
 - Bicep: improve param descriptions -> test in Deploy to Azure
     `image` param: add MCR deep link to description
 - README:
