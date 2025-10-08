@@ -118,6 +118,7 @@ resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2024-11-01-
             { name: 'GCM_CREDENTIAL_STORE', value: 'cache' }
             { name: 'GCM_AZREPOS_CREDENTIALTYPE', value: 'oauth' }
             { name: 'GCM_AZREPOS_MANAGEDIDENTITY', value: identity.properties.clientId }
+            { name: 'DOTNET_SYSTEM_GLOBALIZATION_INVARIANT', value: '1' } // Avoids git-credential-manager failures when the image is missing libicu
           ]
           command: ['/bin/bash', '-c', command]
         }

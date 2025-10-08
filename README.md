@@ -16,9 +16,7 @@ Code with multiple GitHub Copilot agents in parallel using VSCode and Dev Contai
 
 Click on [Deploy to Azure](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmmaitre314%2Fvscode-aci%2Frefs%2Fheads%2Fmain%2Fdeploy%2Fmain.azuredeploy.json), select a resource group and a resource name, click 'Review + Create', and finally click 'Create'.
 
-Once the deployment completes, open the Azure Container Instance, go to Settings > Containers > Logs, 
-
-Sign in at https://microsoft.com/devicelogin with the device code provided.
+Once the deployment completes, open the Azure Container Instance, go to 'Settings > Containers > Logs', and find the device code to enter at https://microsoft.com/devicelogin . After logging in, refresh the logs to find the VS Code URL to open and connect to the container. It will begin with https://vscode.dev/ .
 
 ## Deployment Configuration
 
@@ -33,6 +31,10 @@ To clone a private Git repo from Azure DevOps (ADO), grant the Managed Identity 
 To have VSCode Extensions auto-installed during deployment, fill-in the 'Vscode Extensions' field of the deployment with a JSON array of extension IDs. For instance:
 - For Python: `[ "ms-python.python", "ms-toolsai.jupyter", "github.copilot-chat" ]`
 - For Bicep: `[ "ms-azuretools.vscode-bicep", "github.copilot-chat" ]`
+
+### Container Initialization Command
+
+To run some extra shell commands during container initialization (e.g. `apt install git-all` to install Git if missing from the image), fill-in the 'Init Command' field.
 
 ### Container Size
 

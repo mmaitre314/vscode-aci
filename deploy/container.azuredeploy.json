@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.38.33.27573",
-      "templateHash": "5407409627849115272"
+      "templateHash": "10958866843353564457"
     }
   },
   "parameters": {
@@ -137,6 +137,10 @@
                 {
                   "name": "GCM_AZREPOS_MANAGEDIDENTITY",
                   "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('sharedName')), '2025-01-31-preview').clientId]"
+                },
+                {
+                  "name": "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT",
+                  "value": "1"
                 }
               ],
               "command": [
