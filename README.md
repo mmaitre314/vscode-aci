@@ -67,6 +67,13 @@ Rust | `mcr.microsoft.com/devcontainers/rust:dev-1`
 
 For more images, see https://mcr.microsoft.com?search=devcontainers .
 
+Images other than Dev Containers can also be used, albeit with more work. To develop Bicep code for instance, the Azure CLI image can be used with the following parameters:
+- Image: `mcr.microsoft.com/azure-cli`
+- Vscode Extensions: `[ "ms-azuretools.vscode-bicep", "github.copilot-chat" ]`
+- Init Command: `tdnf install -y tar git`
+
+Use `az container attach` to debug container-initialization failures. 
+
 ## Troubleshooting
 
 ### Container fails to start
@@ -113,6 +120,7 @@ az bicep build --file src/container.bicep --outfile deploy/container.azuredeploy
 ```
 
 TODO:
+- README: document deployment using container.azuredeploy.json (include Deploy to Azure link) for faster container creation once the rest of the infra has been deployed
 - `image` param: add MCR deep link in description
 - Add User settings to container
     "chat.tools.terminal.autoApprove": { updates? }, "chat.agent.maxRequests": 100,
