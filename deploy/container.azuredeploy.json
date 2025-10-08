@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.38.33.27573",
-      "templateHash": "1008655636301080911"
+      "templateHash": "4810406556860993855"
     }
   },
   "parameters": {
@@ -78,13 +78,6 @@
       "metadata": {
         "description": "Name of resources shared by container instances (Managed Identity, Log Analytics, network, etc.)"
       }
-    },
-    "serviceTag": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "description": "Service tag for outbound network traffic (leave empty in most cases)"
-      }
     }
   },
   "variables": {
@@ -103,23 +96,6 @@
     "command": "[replace(replace(replace(replace(variables('commandTemplate'), '{{gitCommandTemplate}}', if(equals(parameters('gitRepoUrl'), ''), '', variables('gitCommandTemplate'))), '{{vsCodeCommandTemplate}}', variables('vsCodeCommandTemplate')), '{{autoShutdown}}', parameters('autoShutdown')), '\r', '')]"
   },
   "resources": [
-    {
-      "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
-      "apiVersion": "2025-01-31-preview",
-      "name": "[parameters('sharedName')]",
-      "location": "[parameters('location')]"
-    },
-    {
-      "type": "Microsoft.OperationalInsights/workspaces",
-      "apiVersion": "2025-02-01",
-      "name": "[parameters('sharedName')]",
-      "location": "[parameters('location')]",
-      "properties": {
-        "sku": {
-          "name": "PerGB2018"
-        }
-      }
-    },
     {
       "type": "Microsoft.ContainerInstance/containerGroups",
       "apiVersion": "2024-11-01-preview",
@@ -169,7 +145,7 @@
         "restartPolicy": "Never",
         "subnetIds": [
           {
-            "id": "[format('{0}/subnets/aci', reference(resourceId('Microsoft.Resources/deployments', 'network'), '2025-04-01').outputs.vnetId.value)]"
+            "id": "[format('{0}/subnets/aci', resourceId('Microsoft.Network/virtualNetworks', parameters('sharedName')))]"
           }
         ],
         "diagnostics": {
@@ -180,158 +156,10 @@
             "workspaceKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces', parameters('sharedName')), '2025-02-01').primarySharedKey]"
           }
         }
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('sharedName'))]",
-        "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('sharedName'))]",
-        "[resourceId('Microsoft.Resources/deployments', 'network')]"
-      ]
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2025-04-01",
-      "name": "network",
-      "properties": {
-        "expressionEvaluationOptions": {
-          "scope": "inner"
-        },
-        "mode": "Incremental",
-        "parameters": {
-          "name": {
-            "value": "[parameters('sharedName')]"
-          },
-          "location": {
-            "value": "[parameters('location')]"
-          },
-          "serviceTag": {
-            "value": "[parameters('serviceTag')]"
-          }
-        },
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "metadata": {
-            "_generator": {
-              "name": "bicep",
-              "version": "0.38.33.27573",
-              "templateHash": "2615872367714658733"
-            }
-          },
-          "parameters": {
-            "name": {
-              "type": "string"
-            },
-            "location": {
-              "type": "string"
-            },
-            "serviceTag": {
-              "type": "string"
-            }
-          },
-          "resources": [
-            {
-              "type": "Microsoft.Network/publicIPAddresses",
-              "apiVersion": "2024-07-01",
-              "name": "[parameters('name')]",
-              "location": "[parameters('location')]",
-              "sku": {
-                "name": "Standard"
-              },
-              "properties": {
-                "publicIPAddressVersion": "IPv4",
-                "publicIPAllocationMethod": "Static",
-                "idleTimeoutInMinutes": 4,
-                "ipTags": "[if(not(equals(parameters('serviceTag'), '')), createArray(createObject('ipTagType', 'FirstPartyUsage', 'tag', parameters('serviceTag'))), createArray())]"
-              }
-            },
-            {
-              "type": "Microsoft.Network/networkSecurityGroups",
-              "apiVersion": "2024-07-01",
-              "name": "[parameters('name')]",
-              "location": "[parameters('location')]",
-              "properties": {
-                "securityRules": []
-              }
-            },
-            {
-              "type": "Microsoft.Network/natGateways",
-              "apiVersion": "2024-07-01",
-              "name": "[parameters('name')]",
-              "location": "[parameters('location')]",
-              "sku": {
-                "name": "Standard"
-              },
-              "properties": {
-                "idleTimeoutInMinutes": 4,
-                "publicIpAddresses": [
-                  {
-                    "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('name'))]"
-                  }
-                ]
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('name'))]"
-              ]
-            },
-            {
-              "type": "Microsoft.Network/virtualNetworks",
-              "apiVersion": "2024-07-01",
-              "name": "[parameters('name')]",
-              "location": "[parameters('location')]",
-              "properties": {
-                "addressSpace": {
-                  "addressPrefixes": [
-                    "10.0.0.0/16"
-                  ]
-                },
-                "subnets": [
-                  {
-                    "name": "aci",
-                    "properties": {
-                      "addressPrefix": "10.0.0.0/24",
-                      "defaultOutboundAccess": false,
-                      "networkSecurityGroup": {
-                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('name'))]"
-                      },
-                      "natGateway": {
-                        "id": "[resourceId('Microsoft.Network/natGateways', parameters('name'))]"
-                      },
-                      "delegations": [
-                        {
-                          "name": "Microsoft.ContainerInstance/containerGroups",
-                          "properties": {
-                            "serviceName": "Microsoft.ContainerInstance/containerGroups"
-                          }
-                        }
-                      ]
-                    }
-                  }
-                ]
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Network/natGateways', parameters('name'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('name'))]"
-              ]
-            }
-          ],
-          "outputs": {
-            "vnetId": {
-              "type": "string",
-              "value": "[resourceId('Microsoft.Network/virtualNetworks', parameters('name'))]"
-            }
-          }
-        }
       }
     }
   ],
   "outputs": {
-    "instructions": {
-      "type": "string",
-      "metadata": {
-        "description": "VSCode tunnel instructions"
-      },
-      "value": "[format('Check container logs to get the device-code login:\n    az container logs --subscription {0} --resource-group {1} --name {2}\nOpen VSCode: https://vscode.dev/tunnel/{3}', subscription().subscriptionId, resourceGroup().name, parameters('name'), parameters('name'))]"
-    },
     "inputValidations": {
       "type": "array",
       "value": [

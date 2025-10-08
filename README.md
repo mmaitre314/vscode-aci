@@ -12,7 +12,9 @@ Code with multiple GitHub Copilot agents in parallel using VSCode and Dev Contai
 
 ## Quickstart
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmmaitre314%2Fvscode-aci%2Frefs%2Fheads%2Fmain%2Fazuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmmaitre314%2Fvscode-aci%2Frefs%2Fheads%2Fmain%2Fdeploy%2Fmain.azuredeploy.json)
+
+Click on [Deploy to Azure](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmmaitre314%2Fvscode-aci%2Frefs%2Fheads%2Fmain%2Fdeploy%2Fmain.azuredeploy.json)
 
 Sign in at https://microsoft.com/devicelogin with the device code provided.
 
@@ -80,9 +82,10 @@ For instance, the Git repo was not cloned, etc. See setup logs in `/root/vscode-
 
 ## Development
 
-The ARM template `azuredeploy.json` is generated from the Bicep file `main.bicep`:
+The ARM templates `params/*.azuredeploy.json` are generated from Bicep files using [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest):
 ```bash
-az bicep build --file main.bicep --outfile azuredeploy.json
+az bicep build --file main.bicep --outfile deploy/main.azuredeploy.json
+az bicep build --file container.bicep --outfile deploy/container.azuredeploy.json
 ```
 
 ## References
