@@ -14,11 +14,33 @@ Code with multiple GitHub Copilot agents in parallel using VSCode and Dev Contai
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmmaitre314%2Fvscode-aci%2Frefs%2Fheads%2Fmain%2Fdeploy%2Fmain.azuredeploy.json)
 
-Click on [Deploy to Azure](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmmaitre314%2Fvscode-aci%2Frefs%2Fheads%2Fmain%2Fdeploy%2Fmain.azuredeploy.json), enter the name of the
+Click on [Deploy to Azure](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmmaitre314%2Fvscode-aci%2Frefs%2Fheads%2Fmain%2Fdeploy%2Fmain.azuredeploy.json), select a resource group and a resource name, click 'Review + Create', and finally click 'Create'.
+
+Once the deployment completes, open the Azure Container Instance, go to Settings > Containers > Logs, 
 
 Sign in at https://microsoft.com/devicelogin with the device code provided.
 
-If cloning a Git repo from Azure DevOps (ADO), grant the Managed Identity access to the ADO repo (for instance by adding it to an ADO Team).
+## Deployment Configuration
+
+### Git
+
+To setup Git, fill in the 'Git Repo URL' field of the deployment. The repo will be cloned to `/root/<repo-name>` in the container
+
+To clone a private Git repo from Azure DevOps (ADO), grant the Managed Identity in the Resource Group access to the ADO repo (for instance by adding it to an ADO Team).
+
+### VSCode Extension
+
+To have VSCode Extensions auto-installed during deployment, fill-in the 'Vscode Extensions' field of the deployment with a JSON array of extension IDs. For instance:
+- For Python: `[ "ms-python.python", "ms-toolsai.jupyter", "github.copilot-chat" ]`
+- For Bicep: `[ "ms-azuretools.vscode-bicep", "github.copilot-chat" ]`
+
+### Container Size
+
+The size of the container is controlled by the fields 'Cpu Cores' and 'Memory In GB'. The default is 1 core with 2GB, costing around $1.20/day (as of 10/2025).
+
+### Auto Shutdown
+
+The container automatically shuts down after some time to avoid runaway costs. The default is 1 day, which can be changed via the 'Auto Shutdown' field, using the format of the [`sleep`](https://www.man7.org/linux/man-pages/man1/sleep.1.html) command (i.e. `infinity` to never shut down, `7d` to shut down after 7 days, `3h` to shut down after 3 hours, etc.). Container activity is not taken into account.
 
 ## Alternative Deployments
 
@@ -107,7 +129,6 @@ Git Credential Manager:
 
 ## Backlog
 
-- Fix Deploy to Azure button
 - Bicep: improve param descriptions -> test in Deploy to Azure
     `image` param: add MCR deep link to description
 - README:
@@ -116,4 +137,3 @@ Git Credential Manager:
     - VSCode online: https://vscode.dev/
 - Add User settings to container
     "chat.tools.terminal.autoApprove": { updates? }, "chat.agent.maxRequests": 100,
-- Add README logo

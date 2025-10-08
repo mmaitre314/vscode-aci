@@ -1,7 +1,0 @@
-{
-    "python.analysis.extraPaths": [
-        "c:\\Users\\mmaitre\\.vscode\\extensions\\ms-security.msg-developer-experience-0.0.9\\python",
-        "c:\\Users\\mmaitre\\.vscode\\extensions\\ms-security.msg-developer-experience-0.0.10-dev\\python",
-        "c:\\Users\\mmaitre\\.vscode\\extensions\\ms-security.ms-sentinel-1.0.0\\python"
-    ]
-}

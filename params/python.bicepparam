@@ -1,4 +1,4 @@
-using './main.bicep'
+using '../src/main.bicep'
 
 param name = '' // Specify on the command line
 param image = 'mcr.microsoft.com/devcontainers/python:dev-3.13'

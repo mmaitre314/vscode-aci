@@ -14,8 +14,11 @@ param gitUserEmail string = deployer().userPrincipalName
 
 param gitUserName string = split(deployer().userPrincipalName, '@')[0]
 
-@description('VSCode extensions to install (e.g. ms-python.python, leave empty to skip)')
+@description('VSCode extensions to install (e.g. ["ms-python.python"], leave empty to skip)')
 param vscodeExtensions array = []
+
+@description('Command to run during container initialization (e.g. "apt install git-all", leave empty to skip)')
+param initCommand string = ''
 
 @description('Number of CPU cores')
 param cpuCores int = 1
@@ -36,15 +39,6 @@ var gcmVersion = '2.6.1'
 var assertNameIsNotEmpty = 1 / (length(name) < 3 ? 0 : 1)
 
 var vscodeExtensionArgs = [ for ext in vscodeExtensions: '--install-extension ${ext}' ]
-
-var commandTemplate = '''
-  set -euxo pipefail
-  exec &> >(tee /root/vscode-aci.log)
-  {{gitCommandTemplate}}
-  {{vsCodeCommandTemplate}}
-  cd /root
-  sleep {{autoShutdown}}
-  '''
 
 var gitCommandTemplate = replace(replace(replace(replace('''
   (
@@ -72,8 +66,16 @@ var vsCodeCommandTemplate = replace(replace('''
   '{{vscodeExtensionArgs}}', join(vscodeExtensionArgs, ' ')),
   '{{name}}', name)
 
-var command = replace(replace(replace(replace(
-  commandTemplate,
+var command = replace(replace(replace(replace(replace('''
+  set -euxo pipefail
+  exec &> >(tee /root/vscode-aci.log)
+  {{initCommand}}
+  {{gitCommandTemplate}}
+  {{vsCodeCommandTemplate}}
+  cd /root
+  sleep {{autoShutdown}}
+  ''',
+  '{{initCommand}}', initCommand),
   '{{gitCommandTemplate}}', gitRepoUrl == '' ? '' : gitCommandTemplate),
   '{{vsCodeCommandTemplate}}', vsCodeCommandTemplate),
   '{{autoShutdown}}', autoShutdown),

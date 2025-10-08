@@ -14,8 +14,11 @@ param gitUserEmail string = deployer().userPrincipalName
 
 param gitUserName string = split(deployer().userPrincipalName, '@')[0]
 
-@description('VSCode extensions to install (e.g. ms-python.python, leave empty to skip)')
+@description('VSCode extensions to install (e.g. ["ms-python.python"], leave empty to skip)')
 param vscodeExtensions array = []
+
+@description('Command to run during container initialization (e.g. "apt install git-all", leave empty to skip)')
+param initCommand string = ''
 
 @description('Number of CPU cores')
 param cpuCores int = 1
@@ -66,6 +69,7 @@ module container 'container.bicep' = {
     gitUserEmail: gitUserEmail
     gitUserName: gitUserName
     vscodeExtensions: vscodeExtensions
+    initCommand: initCommand
     cpuCores: cpuCores
     memoryInGB: memoryInGB
     autoShutdown: autoShutdown
