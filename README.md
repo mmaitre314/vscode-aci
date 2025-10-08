@@ -1,4 +1,4 @@
-![Repo Logo](docs/logo.jpg)
+<img src="https://raw.githubusercontent.com/mmaitre314/vscode-aci/main/docs/logo.jpg" alt="repo logo" style="display: block; margin-left: auto; margin-right: auto; width: 20%;">
 
 # VSCode Dev Containers on Azure Container Instances
 
