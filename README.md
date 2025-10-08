@@ -1,6 +1,6 @@
 <p align="center">
   <picture>
-    <img alt="VSCode ACI" src="https://raw.githubusercontent.com/mmaitre314/vscode-aci/main/docs/logo.jpg" style="max-width: 30%;">
+    <img alt="VSCode ACI" src="https://raw.githubusercontent.com/mmaitre314/vscode-aci/main/docs/logo.jpg" style="width: 30%;">
   </picture>
   <br/>
   <br/>
