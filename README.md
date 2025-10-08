@@ -1,3 +1,5 @@
+![Repo Logo](docs/logo.jpg)
+
 # VSCode Dev Containers on Azure Container Instances
 
 Code with multiple GitHub Copilot agents in parallel using VSCode and Dev Containers on Azure Container Instances.
