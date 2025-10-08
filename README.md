@@ -1,4 +1,10 @@
-<img src="https://raw.githubusercontent.com/mmaitre314/vscode-aci/main/docs/logo.jpg" alt="repo logo" style="display: block; margin-left: auto; margin-right: auto; width: 20%;">
+<p align="center">
+  <picture>
+    <img alt="VSCode ACI" src="https://raw.githubusercontent.com/mmaitre314/vscode-aci/main/docs/logo.jpg" style="max-width: 30%;">
+  </picture>
+  <br/>
+  <br/>
+</p>
 
 # VSCode Dev Containers on Azure Container Instances
 
