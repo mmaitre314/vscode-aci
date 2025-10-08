@@ -22,8 +22,24 @@ If cloning a Git repo from Azure DevOps (ADO), grant the Managed Identity access
 
 Using [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) (in the browser via [Cloud Shell](https://portal.azure.com/#cloudshell/)):
 ```bash
-az deployment group create --subscription <subscription-id> --resource-group <resource-group-name> --template-file main.bicep --parameters python.bicepparam name=<container-name> --output tsv --query properties.outputs.instructions.value
+az deployment group create --subscription <subscription-id> --resource-group <resource-group-name> --template-file main.bicep --parameters params/python.bicepparam name=<container-name> --output tsv --query properties.outputs.instructions.value
 ```
+
+## Dev Container Images
+
+A few images:
+
+Language | Image
+--|--
+.NET | `mcr.microsoft.com/devcontainers/dotnet:dev-9.0`
+C++ | `mcr.microsoft.com/devcontainers/cpp`
+Go | `mcr.microsoft.com/devcontainers/go:dev-1.25`
+Java | `mcr.microsoft.com/devcontainers/java:dev-21`
+NodeJS | `mcr.microsoft.com/devcontainers/javascript-node:dev-24`
+Python | `mcr.microsoft.com/devcontainers/python:dev-3.13`
+Rust | `mcr.microsoft.com/devcontainers/rust:dev-1`
+
+For more images, see https://mcr.microsoft.com?search=devcontainers .
 
 ## Troubleshooting
 

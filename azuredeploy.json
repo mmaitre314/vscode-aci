@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.38.33.27573",
-      "templateHash": "17168930235793959776"
+      "templateHash": "1008655636301080911"
     }
   },
   "parameters": {
@@ -35,6 +35,14 @@
       "metadata": {
         "description": "URL of Git repository to clone"
       }
+    },
+    "gitUserEmail": {
+      "type": "string",
+      "defaultValue": "[deployer().userPrincipalName]"
+    },
+    "gitUserName": {
+      "type": "string",
+      "defaultValue": "[split(deployer().userPrincipalName, '@')[0]]"
     },
     "vscodeExtensions": {
       "type": "array",
@@ -90,7 +98,7 @@
     "gcmVersion": "2.6.1",
     "assertNameIsNotEmpty": "[div(1, if(less(length(parameters('name')), 3), 0, 1))]",
     "commandTemplate": "  set -euxo pipefail\r\n  exec &> >(tee /root/vscode-aci.log)\r\n  {{gitCommandTemplate}}\r\n  {{vsCodeCommandTemplate}}\r\n  cd /root\r\n  sleep {{autoShutdown}}\r\n  ",
-    "gitCommandTemplate": "[replace(replace('  (\r\n    curl -sSL https://github.com/git-ecosystem/git-credential-manager/releases/download/v{{gcmVersion}}/gcm-linux_amd64.{{gcmVersion}}.tar.gz --output /tmp/gcm-linux_amd64.tar.gz\r\n    tar -xzf /tmp/gcm-linux_amd64.tar.gz -C /usr/local/bin\r\n    git-credential-manager configure\r\n    git clone --filter=tree:0 --single-branch {{gitRepoUrl}}\r\n  )&\r\n  ', '{{gcmVersion}}', variables('gcmVersion')), '{{gitRepoUrl}}', parameters('gitRepoUrl'))]",
+    "gitCommandTemplate": "[replace(replace(replace(replace('  (\r\n    curl -sSL https://github.com/git-ecosystem/git-credential-manager/releases/download/v{{gcmVersion}}/gcm-linux_amd64.{{gcmVersion}}.tar.gz --output /tmp/gcm-linux_amd64.tar.gz\r\n    tar -xzf /tmp/gcm-linux_amd64.tar.gz -C /usr/local/bin\r\n    git-credential-manager configure\r\n    git config --global user.name \"{{gitUserName}}\"\r\n    git config --global user.email \"{{gitUserEmail}}\"\r\n    git clone --filter=tree:0 --single-branch {{gitRepoUrl}}\r\n  )&\r\n  ', '{{gcmVersion}}', variables('gcmVersion')), '{{gitRepoUrl}}', parameters('gitRepoUrl')), '{{gitUserEmail}}', parameters('gitUserEmail')), '{{gitUserName}}', parameters('gitUserName'))]",
     "vsCodeCommandTemplate": "[replace(replace('  (\r\n    curl -sSL \"https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64\" --output /tmp/vscode-cli.tar.gz\r\n    tar -xzf /tmp/vscode-cli.tar.gz -C /usr/local/bin\r\n    code tunnel user login --provider microsoft\r\n    code tunnel --accept-server-license-terms --name {{name}} {{vscodeExtensionArgs}}\r\n  )&\r\n  ', '{{vscodeExtensionArgs}}', join(variables('vscodeExtensionArgs'), ' ')), '{{name}}', parameters('name'))]",
     "command": "[replace(replace(replace(replace(variables('commandTemplate'), '{{gitCommandTemplate}}', if(equals(parameters('gitRepoUrl'), ''), '', variables('gitCommandTemplate'))), '{{vsCodeCommandTemplate}}', variables('vsCodeCommandTemplate')), '{{autoShutdown}}', parameters('autoShutdown')), '\r', '')]"
   },

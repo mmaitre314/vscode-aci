@@ -10,6 +10,10 @@ param image string = 'mcr.microsoft.com/devcontainers/python:dev-3'
 @description('URL of Git repository to clone')
 param gitRepoUrl string = ''
 
+param gitUserEmail string = deployer().userPrincipalName
+
+param gitUserName string = split(deployer().userPrincipalName, '@')[0]
+
 @description('VSCode extensions to install (e.g. ms-python.python, leave empty to skip)')
 param vscodeExtensions array = []
 
@@ -45,16 +49,20 @@ var commandTemplate = '''
   sleep {{autoShutdown}}
   '''
 
-var gitCommandTemplate = replace(replace('''
+var gitCommandTemplate = replace(replace(replace(replace('''
   (
     curl -sSL https://github.com/git-ecosystem/git-credential-manager/releases/download/v{{gcmVersion}}/gcm-linux_amd64.{{gcmVersion}}.tar.gz --output /tmp/gcm-linux_amd64.tar.gz
     tar -xzf /tmp/gcm-linux_amd64.tar.gz -C /usr/local/bin
     git-credential-manager configure
+    git config --global user.name "{{gitUserName}}"
+    git config --global user.email "{{gitUserEmail}}"
     git clone --filter=tree:0 --single-branch {{gitRepoUrl}}
   )&
   ''',
   '{{gcmVersion}}', gcmVersion),
-  '{{gitRepoUrl}}', gitRepoUrl)
+  '{{gitRepoUrl}}', gitRepoUrl),
+  '{{gitUserEmail}}', gitUserEmail),
+  '{{gitUserName}}', gitUserName)
 
 var vsCodeCommandTemplate = replace(replace('''
   (
