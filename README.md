@@ -46,10 +46,16 @@ The container automatically shuts down after some time to avoid runaway costs. T
 
 ## Other Deployment Methods
 
-Using [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) (in the browser via [Cloud Shell](https://portal.azure.com/#cloudshell/)):
+### Deploying using Azure CLI
+
+Using [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) (in the browser via [Cloud Shell](https://portal.azure.com/#cloudshell/)), run:
 ```bash
-az deployment group create --subscription <subscription-id> --resource-group <resource-group-name> --template-file src/main.bicep --parameters params/python.bicepparam name=<container-name> --output tsv --query properties.outputs.instructions.value
+az deployment group create --subscription <subscription-id> --resource-group <resource-group-name> --template-file src/main.bicep --parameters params/<language>.bicepparam name=<container-name> --output tsv --query properties.outputs.instructions.value
 ```
+
+### Faster Deployments
+
+After the first deployment completes, new containers can be deployed without redeploying supporting resources (monitoring, network, etc.), which can run a bit faster. Click [here](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmmaitre314%2Fvscode-aci%2Frefs%2Fheads%2Fmain%2Fdeploy%2Fcontainer.azuredeploy.json) to do just that, or deploy `src/container.bicep` using Azure CLI.
 
 ## Dev Container Images
 
@@ -141,3 +147,7 @@ Azure:
 Git Credential Manager:
 - [Install](https://github.com/git-ecosystem/git-credential-manager/blob/release/docs/install.md)
 - [Environment Variables](https://github.com/git-ecosystem/git-credential-manager/blob/release/docs/environment.md)
+
+## Notices
+
+Deployment of code from this repo implies agreement to the [Visual Studio Code Server License Terms](https://aka.ms/vscode-server-license) and the [Microsoft Privacy Statement](https://privacy.microsoft.com/en-US/privacystatement).
