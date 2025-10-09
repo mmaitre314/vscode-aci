@@ -126,10 +126,7 @@ az bicep build --file src/container.bicep --outfile deploy/container.azuredeploy
 ```
 
 TODO:
-- README: document deployment using container.azuredeploy.json (include Deploy to Azure link) for faster container creation once the rest of the infra has been deployed
-- `image` param: add MCR deep link in description
-- Add User settings to container
-    "chat.tools.terminal.autoApprove": { updates? }, "chat.agent.maxRequests": 100,
+- Customize VSCode settings in containers. See `/root/.vscode-server/data/Machine/settings.json`. Candidates: `chat.tools.terminal.autoApprove`, `chat.agent.maxRequests`.
 
 ## References
 

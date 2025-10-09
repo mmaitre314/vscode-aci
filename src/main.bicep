@@ -4,7 +4,7 @@ param name string
 @description('Resource location')
 param location string = resourceGroup().location
 
-@description('Dev Container image name')
+@description('Dev Container image name (see available images on [MCR](https://mcr.microsoft.com?search=devcontainers))')
 param image string = 'mcr.microsoft.com/devcontainers/python:dev-3'
 
 @description('URL of Git repository to clone')
