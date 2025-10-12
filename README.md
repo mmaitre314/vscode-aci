@@ -38,7 +38,7 @@ To run some extra shell commands during container initialization (e.g. `apt inst
 
 ### Container Size
 
-The size of the container is controlled by the fields 'Cpu Cores' and 'Memory In GB'. The default is 1 core with 2GB, costing around $1.20/day (as of 10/2025).
+The size of the container is controlled by the fields 'Cpu Cores' and 'Memory In GB'. The default is 1 core with 6GB, costing around $1.60/day (as of 10/2025).
 
 ### Auto Shutdown
 
@@ -127,6 +127,7 @@ az bicep build --file src/container.bicep --outfile deploy/container.azuredeploy
 
 TODO:
 - Customize VSCode settings in containers. See `/root/.vscode-server/data/Machine/settings.json`. Candidates: `chat.tools.terminal.autoApprove`, `chat.agent.maxRequests`.
+- Use non-root user
 
 ## References
 

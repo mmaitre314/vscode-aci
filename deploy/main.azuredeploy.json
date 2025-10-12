@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.38.33.27573",
-      "templateHash": "17260659733425896058"
+      "templateHash": "15060132604260727167"
     }
   },
   "parameters": {
@@ -67,14 +67,14 @@
     },
     "memoryInGB": {
       "type": "int",
-      "defaultValue": 2,
+      "defaultValue": 6,
       "metadata": {
         "description": "Memory in GB"
       }
     },
     "autoShutdown": {
       "type": "string",
-      "defaultValue": "1d",
+      "defaultValue": "3d",
       "metadata": {
         "description": "Auto-shutdown after this duration (e.g. 4h, 1d, infinity)"
       }
@@ -299,7 +299,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.38.33.27573",
-              "templateHash": "18126126162420876227"
+              "templateHash": "13469694250966181603"
             }
           },
           "parameters": {
@@ -361,14 +361,14 @@
             },
             "memoryInGB": {
               "type": "int",
-              "defaultValue": 2,
+              "defaultValue": 6,
               "metadata": {
                 "description": "Memory in GB"
               }
             },
             "autoShutdown": {
               "type": "string",
-              "defaultValue": "1d",
+              "defaultValue": "3d",
               "metadata": {
                 "description": "Auto-shutdown after this duration (e.g. 4h, 1d, infinity)"
               }
@@ -391,7 +391,7 @@
             ],
             "gcmVersion": "2.6.1",
             "assertNameIsNotEmpty": "[div(1, if(less(length(parameters('name')), 3), 0, 1))]",
-            "gitCommandTemplate": "[replace(replace(replace(replace('  (\n    curl -sSL https://github.com/git-ecosystem/git-credential-manager/releases/download/v{{gcmVersion}}/gcm-linux_amd64.{{gcmVersion}}.tar.gz --output /tmp/gcm-linux_amd64.tar.gz\n    tar -xzf /tmp/gcm-linux_amd64.tar.gz -C /usr/local/bin\n    git-credential-manager configure\n    git config --global user.name \"{{gitUserName}}\"\n    git config --global user.email \"{{gitUserEmail}}\"\n    git clone --filter=tree:0 --single-branch {{gitRepoUrl}}\n  )&\n  ', '{{gcmVersion}}', variables('gcmVersion')), '{{gitRepoUrl}}', parameters('gitRepoUrl')), '{{gitUserEmail}}', parameters('gitUserEmail')), '{{gitUserName}}', parameters('gitUserName'))]",
+            "gitCommandTemplate": "[replace(replace(replace(replace('  (\n    curl -sSL https://github.com/git-ecosystem/git-credential-manager/releases/download/v{{gcmVersion}}/gcm-linux_amd64.{{gcmVersion}}.tar.gz --output /tmp/gcm-linux_amd64.tar.gz\n    tar -xzf /tmp/gcm-linux_amd64.tar.gz -C /usr/local/bin\n    git-credential-manager configure\n    git config --global user.name \"{{gitUserName}}\"\n    git config --global user.email \"{{gitUserEmail}}\"\n    git clone --filter=tree:0 --single-branch {{gitRepoUrl}} /root\n  )&\n  ', '{{gcmVersion}}', variables('gcmVersion')), '{{gitRepoUrl}}', parameters('gitRepoUrl')), '{{gitUserEmail}}', parameters('gitUserEmail')), '{{gitUserName}}', parameters('gitUserName'))]",
             "vsCodeCommandTemplate": "[replace(replace('  (\n    curl -sSL \"https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64\" --output /tmp/vscode-cli.tar.gz\n    tar -xzf /tmp/vscode-cli.tar.gz -C /usr/local/bin\n    code tunnel user login --provider microsoft\n    code tunnel --accept-server-license-terms --name {{name}} {{vscodeExtensionArgs}}\n  )&\n  ', '{{vscodeExtensionArgs}}', join(variables('vscodeExtensionArgs'), ' ')), '{{name}}', parameters('name'))]",
             "command": "[replace(replace(replace(replace(replace('  set -euxo pipefail\n  exec &> >(tee /root/vscode-aci.log)\n  {{initCommand}}\n  {{gitCommandTemplate}}\n  {{vsCodeCommandTemplate}}\n  cd /root\n  sleep {{autoShutdown}}\n  ', '{{initCommand}}', parameters('initCommand')), '{{gitCommandTemplate}}', if(equals(parameters('gitRepoUrl'), ''), '', variables('gitCommandTemplate'))), '{{vsCodeCommandTemplate}}', variables('vsCodeCommandTemplate')), '{{autoShutdown}}', parameters('autoShutdown')), '\r', '')]"
           },

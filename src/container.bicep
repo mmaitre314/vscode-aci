@@ -24,10 +24,10 @@ param initCommand string = ''
 param cpuCores int = 1
 
 @description('Memory in GB')
-param memoryInGB int = 2
+param memoryInGB int = 6
 
 @description('Auto-shutdown after this duration (e.g. 4h, 1d, infinity)')
-param autoShutdown string = '1d'
+param autoShutdown string = '3d'
 
 @description('Name of resources shared by container instances (Managed Identity, Log Analytics, network, etc.)')
 param sharedName string = resourceGroup().name
@@ -47,7 +47,7 @@ var gitCommandTemplate = replace(replace(replace(replace('''
     git-credential-manager configure
     git config --global user.name "{{gitUserName}}"
     git config --global user.email "{{gitUserEmail}}"
-    git clone --filter=tree:0 --single-branch {{gitRepoUrl}}
+    git clone --filter=tree:0 --single-branch {{gitRepoUrl}} /root
   )&
   ''',
   '{{gcmVersion}}', gcmVersion),
