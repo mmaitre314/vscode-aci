@@ -82,4 +82,4 @@ module container 'container.bicep' = {
 }
 
 @description('VSCode tunnel instructions')
-output instructions string = 'Check container logs to get the device-code login:\n    az container logs --subscription ${subscription().subscriptionId} --resource-group ${resourceGroup().name} --name ${name}\nOpen VSCode: https://vscode.dev/tunnel/${name}'
+output instructions string = 'Check container logs to get the device-code login:\n    az container logs --subscription ${subscription().subscriptionId} --resource-group ${resourceGroup().name} --name ${name}\nOpen VSCode: https://vscode.dev/tunnel/${container.outputs.tunnelName}'

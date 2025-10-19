@@ -38,6 +38,7 @@ var gcmVersion = '2.6.1'
 // Input validation (ugly hack to avoid using the experimental 'assert' or setting @minLength() which breaks bicepparam)
 var assertNameIsNotEmpty = 1 / (length(name) < 3 ? 0 : 1)
 
+var tunnelName = take(name, 20)
 var vscodeExtensionArgs = [ for ext in vscodeExtensions: '--install-extension ${ext}' ]
 
 var gitCommandTemplate = replace(replace(replace(replace('''
@@ -47,7 +48,7 @@ var gitCommandTemplate = replace(replace(replace(replace('''
     git-credential-manager configure
     git config --global user.name "{{gitUserName}}"
     git config --global user.email "{{gitUserEmail}}"
-    git clone --filter=tree:0 --single-branch {{gitRepoUrl}} /root
+    git clone --filter=tree:0 --single-branch {{gitRepoUrl}}
   )&
   ''',
   '{{gcmVersion}}', gcmVersion),
@@ -60,19 +61,19 @@ var vsCodeCommandTemplate = replace(replace('''
     curl -sSL "https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64" --output /tmp/vscode-cli.tar.gz
     tar -xzf /tmp/vscode-cli.tar.gz -C /usr/local/bin
     code tunnel user login --provider microsoft
-    code tunnel --accept-server-license-terms --name {{name}} {{vscodeExtensionArgs}}
+    code tunnel --accept-server-license-terms --name {{tunnelName}} {{vscodeExtensionArgs}}
   )&
   ''',
   '{{vscodeExtensionArgs}}', join(vscodeExtensionArgs, ' ')),
-  '{{name}}', name)
+  '{{tunnelName}}', tunnelName)
 
 var command = replace(replace(replace(replace(replace('''
   set -euxo pipefail
   exec &> >(tee /root/vscode-aci.log)
+  cd /root
   {{initCommand}}
   {{gitCommandTemplate}}
   {{vsCodeCommandTemplate}}
-  cd /root
   sleep {{autoShutdown}}
   ''',
   '{{initCommand}}', initCommand),
@@ -143,6 +144,8 @@ resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2024-11-01-
     }
   }
 }
+
+output tunnelName string = tunnelName
 
 // Hack to prevent the compiler from optimizing out the input validation
 output inputValidations array = [assertNameIsNotEmpty]
