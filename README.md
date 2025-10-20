@@ -24,7 +24,7 @@ Once the deployment completes, open the Azure Container Instance, go to 'Setting
 
 To clone a Git repo, fill in the 'Git Repo URL' field of the deployment. The repo will be cloned to `/root/<repo-name>` in the container.
 
-To clone a private Git repo from Azure DevOps (ADO), grant the Managed Identity in the Resource Group access to the ADO repo (for instance by adding it to an ADO Team).
+To clone a private Git repo from Azure DevOps (ADO), grant the Managed Identity in the Resource Group access to the ADO repo (for instance by adding it to an ADO Team). If user identity should be used instead, run `unset GCM_AZREPOS_MANAGEDIDENTITY` in a terminal before cloning the repo with `git clone --filter=tree:0 --single-branch <repo-url>`.
 
 ### VSCode Extension
 
