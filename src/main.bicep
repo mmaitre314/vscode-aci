@@ -29,6 +29,9 @@ param memoryInGB int = 6
 @description('Auto-shutdown after this duration (e.g. 4h, 1d, infinity)')
 param autoShutdown string = '3d'
 
+@description('Use Managed Identity for Git authentication (set to false to use user credentials instead)')
+param useManagedIdentity bool = true
+
 @description('Name of resources shared by container instances (Managed Identity, Log Analytics, network, etc.)')
 param sharedName string = resourceGroup().name
 
@@ -73,6 +76,8 @@ module container 'container.bicep' = {
     cpuCores: cpuCores
     memoryInGB: memoryInGB
     autoShutdown: autoShutdown
+    useManagedIdentity: useManagedIdentity
+    sharedName: sharedName
   }
   dependsOn: [
     identity

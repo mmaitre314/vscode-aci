@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.38.33.27573",
-      "templateHash": "14398141062199437524"
+      "templateHash": "191602474760938281"
     }
   },
   "parameters": {
@@ -77,6 +77,13 @@
       "defaultValue": "3d",
       "metadata": {
         "description": "Auto-shutdown after this duration (e.g. 4h, 1d, infinity)"
+      }
+    },
+    "useManagedIdentity": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Use Managed Identity for Git authentication (set to false to use user credentials instead)"
       }
     },
     "sharedName": {
@@ -290,6 +297,12 @@
           },
           "autoShutdown": {
             "value": "[parameters('autoShutdown')]"
+          },
+          "useManagedIdentity": {
+            "value": "[parameters('useManagedIdentity')]"
+          },
+          "sharedName": {
+            "value": "[parameters('sharedName')]"
           }
         },
         "template": {
@@ -299,7 +312,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.38.33.27573",
-              "templateHash": "16542610327240284789"
+              "templateHash": "329613510356959970"
             }
           },
           "parameters": {
@@ -373,6 +386,13 @@
                 "description": "Auto-shutdown after this duration (e.g. 4h, 1d, infinity)"
               }
             },
+            "useManagedIdentity": {
+              "type": "bool",
+              "defaultValue": true,
+              "metadata": {
+                "description": "Use Managed Identity for Git authentication (set to false to use user credentials instead)"
+              }
+            },
             "sharedName": {
               "type": "string",
               "defaultValue": "[resourceGroup().name]",
@@ -431,7 +451,7 @@
                         },
                         {
                           "name": "GCM_AZREPOS_MANAGEDIDENTITY",
-                          "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('sharedName')), '2025-01-31-preview').clientId]"
+                          "value": "[if(parameters('useManagedIdentity'), reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('sharedName')), '2025-01-31-preview').clientId, '')]"
                         },
                         {
                           "name": "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT",

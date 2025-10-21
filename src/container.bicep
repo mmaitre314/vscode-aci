@@ -29,6 +29,9 @@ param memoryInGB int = 6
 @description('Auto-shutdown after this duration (e.g. 4h, 1d, infinity)')
 param autoShutdown string = '3d'
 
+@description('Use Managed Identity for Git authentication (set to false to use user credentials instead)')
+param useManagedIdentity bool = true
+
 @description('Name of resources shared by container instances (Managed Identity, Log Analytics, network, etc.)')
 param sharedName string = resourceGroup().name
 
@@ -118,7 +121,7 @@ resource containerGroup 'Microsoft.ContainerInstance/containerGroups@2024-11-01-
           environmentVariables: [
             { name: 'GCM_CREDENTIAL_STORE', value: 'cache' }
             { name: 'GCM_AZREPOS_CREDENTIALTYPE', value: 'oauth' }
-            { name: 'GCM_AZREPOS_MANAGEDIDENTITY', value: identity.properties.clientId }
+            { name: 'GCM_AZREPOS_MANAGEDIDENTITY', value: useManagedIdentity ? identity.properties.clientId : '' }
             { name: 'DOTNET_SYSTEM_GLOBALIZATION_INVARIANT', value: '1' } // Avoids git-credential-manager failures when the image is missing libicu
           ]
           command: ['/bin/bash', '-c', command]
